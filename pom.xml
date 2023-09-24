@@ -32,6 +32,10 @@
             <artifactId>spring-integration-mqtt</artifactId>
             <version>6.1.3</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
