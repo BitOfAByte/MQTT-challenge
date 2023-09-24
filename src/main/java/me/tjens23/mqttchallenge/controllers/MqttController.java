@@ -12,19 +12,22 @@ import com.google.gson.JsonObject;
 @RestController
 public class MqttController {
 
-
     @Autowired
     MqttGateway mqtGateway;
+
     @PostMapping("/sendMessage")
     public ResponseEntity<?> publish(@RequestBody String mqttMessage){
 
         try {
-            JsonObject convertObject = new Gson().fromJson(mqttMessage, JsonObject.class);
-            mqtGateway.sendToMqtt(convertObject.get("message").toString(), convertObject.get("topic").toString());
-            return ResponseEntity.ok("Message " + mqttMessage.toString());
-        }catch(Exception ex) {
+            JsonObject jsonObject = new Gson().fromJson(mqttMessage, JsonObject.class);
+            String data = jsonObject.getAsJsonObject("message").get("data").getAsString();
+            String topic = jsonObject.get("topic").getAsString();
+            mqtGateway.sendToMqtt(data, topic);
+
+            return ResponseEntity.ok("Message sent: " + data);
+        } catch(Exception ex) {
             ex.printStackTrace();
-            return ResponseEntity.ok("fail");
+            return ResponseEntity.ok("Failed to send message");
         }
     }
 }
